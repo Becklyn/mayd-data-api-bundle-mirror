@@ -47,7 +47,7 @@ class DataApiSecretBox
             $secret
         );
 
-        return null !== $data
+        return false !== $data
             ? \json_decode($data, true)
             : null;
     }

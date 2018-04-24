@@ -65,7 +65,7 @@ class DataApi
 
             if (null === $data || !is_array($data) || !isset($data["status"]))
             {
-                throw new ApiResponseException("invalid_response_payload", "No parseable response given.");
+                throw new ApiResponseException("invalid_payload", "No parseable response given.");
             }
 
             if ("error" === $data["status"])
@@ -75,7 +75,7 @@ class DataApi
 
             if ("ok" !== $data["status"])
             {
-                throw new ApiResponseException("unknown_response_status", "Unknown status: {$data['status']}.");
+                throw new ApiResponseException("unknown_status", "Unknown status: {$data['status']}.");
             }
 
             $responseData = DataApiSecretBox::fromArray($data);

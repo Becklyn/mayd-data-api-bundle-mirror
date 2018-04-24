@@ -3,11 +3,16 @@
 namespace Mayd\DataApiBundle\Api;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
 use Mayd\DataApiBundle\Encryption\DataApiEncryption;
 use Mayd\DataApiBundle\Encryption\DataApiSecretBox;
 use Mayd\DataApiBundle\Exception\ApiResponseException;
 
 
+/**
+ * Main handler to interact with the API
+ */
 class DataApi
 {
     /**
@@ -51,14 +56,13 @@ class DataApi
      */
     public function request (string $endpoint, array $data = []) : ?array
     {
-        $secretBox = $this->encryption->encrypt($data);
-        $payload = $secretBox->toArray();
-        $payload["id"] = $this->project;
-
         try
         {
+            $secretBox = $this->encryption->encrypt($data);
             $response = $this->client->get(rtrim($endpoint, "/"), [
-                "json" => $payload,
+                "json" => \array_replace($secretBox->toArray(), [
+                    "id" => $this->project,
+                ]),
             ]);
 
             $data = \json_decode((string) $response->getBody(), true);
@@ -87,7 +91,12 @@ class DataApi
 
             return $this->encryption->decrypt($responseData);
         }
-        catch (\Exception $e)
+        catch (BadResponseException $e)
+        {
+            $statusCode = $e->getResponse() ? $e->getResponse()->getStatusCode() : "?";
+            throw new ApiResponseException("request_failed", "The request has failed with status code {$statusCode}.", $e);
+        }
+        catch (GuzzleException $e)
         {
             throw new ApiResponseException("request_failed", "The request has failed.", $e);
         }

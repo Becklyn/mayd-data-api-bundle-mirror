@@ -41,7 +41,7 @@ class DataApi
         $this->endpointUrl = rtrim($endpointUrl, "/");
 
         $this->client = new Client([
-            "base_url" => $this->endpointUrl,
+            "base_uri" => $this->endpointUrl,
             "headers" => [
                 "Accept" => "application/json",
             ],
@@ -89,10 +89,7 @@ class DataApi
         }
         catch (\Exception $e)
         {
-            dump($e);
+            throw new ApiResponseException("request_failed", "The request has failed.", $e);
         }
-
-
-
     }
 }

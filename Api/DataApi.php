@@ -23,12 +23,6 @@ class DataApi
 
 
     /**
-     * @var string
-     */
-    private $endpointUrl;
-
-
-    /**
      *
      * @param DataApiEncryption $encryption
      * @param string            $project

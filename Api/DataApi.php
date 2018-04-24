@@ -38,10 +38,9 @@ class DataApi
     {
         $this->encryption = $encryption;
         $this->project = $project;
-        $this->endpointUrl = rtrim($endpointUrl, "/");
 
         $this->client = new Client([
-            "base_uri" => $this->endpointUrl,
+            "base_uri" => rtrim($endpointUrl, "/") . "/",
             "headers" => [
                 "Accept" => "application/json",
             ],
@@ -57,7 +56,7 @@ class DataApi
 
         try
         {
-            $response = $this->client->get($endpoint, [
+            $response = $this->client->get(rtrim($endpoint, "/"), [
                 "json" => $payload,
             ]);
 

@@ -82,6 +82,7 @@ class DataApiSecretBox
      */
     public static function fromArray (array $apiData) : ?self
     {
+        // "p" is for payload and "n" is for nonce
         if (!isset($apiData["p"], $apiData["n"])
             || !\is_string($apiData["p"])
             || !\is_string($apiData["n"])
@@ -102,6 +103,7 @@ class DataApiSecretBox
      */
     public function toArray ()
     {
+        // "p" is for payload and "n" is for nonce
         return [
             "p" => \base64_encode($this->cipherText),
             "n" => \base64_encode($this->nonce),

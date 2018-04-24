@@ -19,8 +19,10 @@ class MaydDataApiConfiguration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode("project")
+                    ->isRequired()
                 ->end()
                 ->scalarNode("secret")
+                    ->isRequired()
                 ->end()
             ->end();
 

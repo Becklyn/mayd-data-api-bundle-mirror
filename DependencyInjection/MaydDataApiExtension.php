@@ -2,6 +2,8 @@
 
 namespace Mayd\DataApiBundle\DependencyInjection;
 
+use Mayd\DataApiBundle\Api\DataApi;
+use Mayd\DataApiBundle\Encryption\DataApiEncryption;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -22,5 +24,12 @@ class MaydDataApiExtension extends Extension
             new FileLocator(__DIR__ . "/../Resources/config")
         );
         $loader->load("services.yaml");
+
+        $container->getDefinition(DataApiEncryption::class)
+            ->setArgument('$secret', $config['secret']);
+
+        $container->getDefinition(DataApi::class)
+            ->setArgument('$project', $config['project'])
+            ->setArgument('$endpointUrl', $config['endpoint']);
     }
 }

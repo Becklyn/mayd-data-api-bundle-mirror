@@ -24,6 +24,9 @@ class MaydDataApiConfiguration implements ConfigurationInterface
                 ->scalarNode("secret")
                     ->isRequired()
                 ->end()
+                ->scalarNode("endpoint")
+                    ->defaultValue("https://mayd.cloud/api/data/")
+                ->end()
             ->end();
 
         return $treeBuilder;

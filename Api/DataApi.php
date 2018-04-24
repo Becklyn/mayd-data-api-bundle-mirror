@@ -53,6 +53,8 @@ class DataApi
      * @param string $endpoint
      * @param array  $data
      * @return array|null
+     *
+     * @throws ApiResponseException
      */
     public function request (string $endpoint, array $data = []) : ?array
     {

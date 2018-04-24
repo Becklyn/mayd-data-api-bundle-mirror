@@ -14,7 +14,7 @@ class MaydDataApiConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder ()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root("mayd_data_api");
+        $rootNode = $treeBuilder->root("mayd.data_api");
 
         $rootNode
             ->children()

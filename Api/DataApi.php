@@ -4,6 +4,8 @@ namespace Mayd\DataApiBundle\Api;
 
 use GuzzleHttp\Client;
 use Mayd\DataApiBundle\Encryption\DataApiEncryption;
+use Mayd\DataApiBundle\Encryption\DataApiSecretBox;
+use Mayd\DataApiBundle\Exception\ApiResponseException;
 
 
 class DataApi
@@ -60,7 +62,30 @@ class DataApi
             ]);
 
             $data = \json_decode((string) $response->getBody(), true);
-            dump($data);
+
+            if (null === $data || !is_array($data) || !isset($data["status"]))
+            {
+                throw new ApiResponseException("invalid_response_payload", "No parseable response given.");
+            }
+
+            if ("error" === $data["status"])
+            {
+                throw new ApiResponseException($data["error"] ?? "unknown_error", $data["message"] ?? "");
+            }
+
+            if ("ok" !== $data["status"])
+            {
+                throw new ApiResponseException("unknown_response_status", "Unknown status: {$data['status']}.");
+            }
+
+            $responseData = DataApiSecretBox::fromArray($data);
+
+            if (null === $responseData)
+            {
+                return null;
+            }
+
+            return $this->encryption->decrypt($responseData);
         }
         catch (\Exception $e)
         {

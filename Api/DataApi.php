@@ -42,7 +42,14 @@ class DataApi
     }
 
 
-    public function sendRequest (string $endpoint, array $data = []) : ?array
+    /**
+     * Sends a request to the API
+     *
+     * @param string $endpoint
+     * @param array  $data
+     * @return array|null
+     */
+    public function request (string $endpoint, array $data = []) : ?array
     {
         $secretBox = $this->encryption->encrypt($data);
         $payload = $secretBox->toArray();
